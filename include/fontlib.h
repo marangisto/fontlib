@@ -30,6 +30,6 @@ struct font_t
 
 const glyph_t *get_glyph(const font_t& font, char c);
 
-extern font_t font;
+extern const font_t font;
 
 } // fontlib
