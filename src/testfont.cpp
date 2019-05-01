@@ -1397,7 +1397,7 @@ static const uint8_t bitmap_126[] =
     };
 
 static const glyph_t glyphs[95] =
-    { { 0, 0, 0, 0, bitmap_32 } // ' '
+    { { 8, 0, 0, 0, bitmap_32 } // ' '
     , { 3, 12, 3, -11, bitmap_33 } // '!'
     , { 6, 6, 2, -11, bitmap_34 } // '"'
     , { 8, 11, 1, -11, bitmap_35 } // '#'
