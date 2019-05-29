@@ -25,7 +25,24 @@ int main()
     SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0x0, 0xff);
     SDL_RenderDrawPoint(renderer, 100, 100);
     SDL_RenderPresent(renderer);
-    SDL_Delay(2000);
+
+    bool quit = false;
+
+    while (!quit)
+    {
+        SDL_Event e;
+
+        if (SDL_PollEvent(&e))
+            switch (e.type)
+            {
+            case SDL_QUIT:
+                quit = true;
+                break;
+            default:
+                ;
+            }
+    }
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
