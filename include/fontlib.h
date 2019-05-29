@@ -15,7 +15,7 @@ struct glyph_t
 {
     uint8_t         width;
     uint8_t         height;
-    int8_t          offset_h;
+    uint8_t         offset_h;   // required to be non-negative
     int8_t          offset_v;
     const uint8_t   *bitmap;
 };
