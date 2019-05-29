@@ -8,7 +8,6 @@ int main()
 {
     printf("hello world!\n");
     SDL_Window *window = 0;
-    SDL_Surface *surface = 0;
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         throw "could not initialize SD2";
@@ -21,10 +20,13 @@ int main()
         , SDL_WINDOW_SHOWN
         )))
         throw "could not create window";
-    surface = SDL_GetWindowSurface(window);
-    SDL_FillRect(surface, 0, SDL_MapRGB(surface->format, 0xff, 0xff, 0x00));
-    SDL_UpdateWindowSurface(window);
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0x0, 0xff);
+    SDL_RenderDrawPoint(renderer, 100, 100);
+    SDL_RenderPresent(renderer);
     SDL_Delay(2000);
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
 }
