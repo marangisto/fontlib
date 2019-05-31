@@ -1,8 +1,51 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
+#include <fontlib.h>
 
 #define SCREEN_WIDTH 240
 #define SCREEN_HEIGHT 240
+
+using namespace fontlib;
+
+static void draw_glyph(SDL_Renderer *renderer, font_t& font, char ch)
+{
+    int x0 = 50, y0 = 150;
+
+    SDL_SetRenderDrawColor(renderer, 0x0, 0x0, 0x0, 0xff);
+    SDL_RenderClear(renderer);
+
+    /*
+    for (int x = 0; x < SCREEN_WIDTH; ++x)
+    {
+        SDL_RenderDrawPoint(renderer, x, y0);
+        SDL_RenderDrawPoint(renderer, x, y0 + font.height);
+    }
+    */
+
+    const glyph_t *g = get_glyph(font, ch);
+
+    if (g)
+    {
+        SDL_SetRenderDrawColor(renderer, 0x0, 0x0, 0xff, 0xff);
+        SDL_Rect outer = { x0-1, y0-1, g->width+2, -(font.height+2) };
+        SDL_RenderDrawRect(renderer, &outer);
+        SDL_SetRenderDrawColor(renderer, 0xff, 0x0, 0x0, 0xff);
+        SDL_Rect inner = { x0 + g->offset_h, y0 + g->offset_v, g->width, g->height };
+        SDL_RenderDrawRect(renderer, &inner);
+
+        for (unsigned r = 0; r < g->height; ++r)
+        {
+            for (unsigned c = 0; c < g->width; ++c)
+            {
+                unsigned color = g->bitmap[r * g->width + c];
+                SDL_SetRenderDrawColor(renderer, color, color, color, 0xff);
+                SDL_RenderDrawPoint(renderer, x0 + g->offset_h + c, y0 + g->offset_v + r);
+            }
+        }
+    }
+
+    SDL_RenderPresent(renderer);
+}
 
 int main()
 {
@@ -11,6 +54,7 @@ int main()
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         throw "could not initialize SD2";
+
     if (!(window = SDL_CreateWindow
         ( "Hello World!"
         , SDL_WINDOWPOS_UNDEFINED
@@ -27,6 +71,9 @@ int main()
     SDL_RenderPresent(renderer);
 
     bool quit = false;
+    font_t font = fontlib::font;
+
+    SDL_StartTextInput();
 
     while (!quit)
     {
@@ -37,6 +84,14 @@ int main()
             {
             case SDL_QUIT:
                 quit = true;
+                break;
+            case SDL_TEXTINPUT:
+                {
+                    uint16_t uc = e.text.text[0];
+
+                    if (uc < 0x80)
+                        draw_glyph(renderer, font, (char) uc);
+                }
                 break;
             default:
                 ;

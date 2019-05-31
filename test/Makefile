@@ -1,4 +1,5 @@
 CFLAGS = -O3 -fexceptions
+CPPFLAGS = -I../include
 LDFLAGS =
 appname = test
 
@@ -12,7 +13,6 @@ sdl_libs := $(shell pkg-config --libs sdl2)
 override CFLAGS += $(sdl_cflags)
 override LIBS += $(sdl_libs)
 
-$(appname): Main.o
+$(appname): Main.o ../src/fontlib.o ../src/testfont.o
 	g++ $(LDFLAGS) -o $@ $^ $(LIBS)
-
 
