@@ -14,18 +14,23 @@ static void draw_glyph(SDL_Renderer *renderer, font_t& font, char ch)
     SDL_SetRenderDrawColor(renderer, 0x0, 0x0, 0x0, 0xff);
     SDL_RenderClear(renderer);
 
-    /*
-    for (int x = 0; x < SCREEN_WIDTH; ++x)
-    {
-        SDL_RenderDrawPoint(renderer, x, y0);
-        SDL_RenderDrawPoint(renderer, x, y0 + font.height);
-    }
-    */
+    SDL_Texture *texture = SDL_CreateTexture
+        ( renderer
+        , SDL_PIXELFORMAT_RGB888
+        , SDL_TEXTUREACCESS_TARGET
+        , SCREEN_WIDTH
+        , SCREEN_HEIGHT
+        );
+
+    SDL_SetRenderTarget(renderer, texture);
 
     const glyph_t *g = get_glyph(font, ch);
 
     if (g)
     {
+        SDL_SetRenderDrawColor(renderer, 0x80, 0x80, 0x80, 0xff);
+        SDL_RenderDrawLine(renderer, x0, y0, SCREEN_WIDTH -1, y0);
+        SDL_RenderDrawLine(renderer, x0, y0, x0, SCREEN_HEIGHT -1);
         SDL_SetRenderDrawColor(renderer, 0x0, 0x0, 0xff, 0xff);
         SDL_Rect outer = { x0-1, y0-1, g->width+2, -(font.height+2) };
         SDL_RenderDrawRect(renderer, &outer);
@@ -44,6 +49,9 @@ static void draw_glyph(SDL_Renderer *renderer, font_t& font, char ch)
         }
     }
 
+    SDL_SetRenderTarget(renderer, 0);
+    SDL_RenderCopy(renderer, texture, 0, 0);
+
     SDL_RenderPresent(renderer);
 }
 
@@ -59,15 +67,15 @@ int main()
         ( "Hello World!"
         , SDL_WINDOWPOS_UNDEFINED
         , SDL_WINDOWPOS_UNDEFINED
-	    , SCREEN_WIDTH
-        , SCREEN_HEIGHT
+	    , SCREEN_WIDTH * 3
+        , SCREEN_HEIGHT * 3
         , SDL_WINDOW_SHOWN
         )))
         throw "could not create window";
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0x0, 0xff);
-    SDL_RenderDrawPoint(renderer, 100, 100);
+    //SDL_RenderDrawPoint(renderer, 100, 100);
     SDL_RenderPresent(renderer);
 
     bool quit = false;
