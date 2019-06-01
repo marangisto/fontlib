@@ -32,3 +32,8 @@
 *.app
 
 *.swp
+
+# Font code-gen artefacts
+fontlist.h
+src/*_??.cpp
+ttf/*/*
