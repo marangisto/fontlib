@@ -30,7 +30,9 @@
 *.exe
 *.out
 *.app
+test
 
+# Editor temporaries
 *.swp
 
 # Font code-gen artefacts

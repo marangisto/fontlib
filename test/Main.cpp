@@ -31,14 +31,19 @@ static void draw_glyph(SDL_Renderer *renderer, font_t& font, char ch)
     {
         printf("%d %d %d %d\n", g->width, g->height, g->offset_h, g->offset_v);
         SDL_SetRenderDrawColor(renderer, 0x80, 0x80, 0x80, 0xff);
-        SDL_RenderDrawLine(renderer, x0, y0, SCREEN_WIDTH -1, y0);
-        SDL_RenderDrawLine(renderer, x0, y0, x0, SCREEN_HEIGHT -1);
+        SDL_RenderDrawLine(renderer, x0, 0, x0, SCREEN_HEIGHT -1);
+        SDL_RenderDrawLine(renderer, 0, y0, SCREEN_WIDTH -1, y0);
+        SDL_RenderDrawLine(renderer, 0, y0 + font.min_y, SCREEN_WIDTH -1, y0 + font.min_y);
+        SDL_RenderDrawLine(renderer, 0, y0 + font.max_y, SCREEN_WIDTH -1, y0 + font.max_y);
         SDL_SetRenderDrawColor(renderer, 0x0, 0x0, 0xff, 0xff);
-        SDL_Rect outer = { x0-1, y0-1, g->width+2, -(font.height+2) };
+        SDL_Rect outer = { x0-1, y0 + font.max_y + 1, g->width+2, -(font.height+2) };
         SDL_RenderDrawRect(renderer, &outer);
         SDL_SetRenderDrawColor(renderer, 0xff, 0x0, 0x0, 0xff);
         SDL_Rect inner = { x0 + g->offset_h, y0 + g->offset_v, g->width, g->height };
         SDL_RenderDrawRect(renderer, &inner);
+        SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0x0, 0xff);
+        SDL_RenderDrawLine(renderer, x0 + g->offset_h, y0 + font.min_y, x0 + g->offset_h + g->width - 1, y0 + font.min_y);
+        SDL_RenderDrawLine(renderer, x0 + g->offset_h, y0 + font.max_y, x0 + g->offset_h + g->width - 1, y0 + font.max_y);
 
         for (unsigned r = 0; r < g->height; ++r)
         {
@@ -69,15 +74,15 @@ int main()
         ( "Hello World!"
         , SDL_WINDOWPOS_UNDEFINED
         , SDL_WINDOWPOS_UNDEFINED
-	    , SCREEN_WIDTH * 1
-        , SCREEN_HEIGHT * 1
+	    , SCREEN_WIDTH * 4
+        , SCREEN_HEIGHT * 4
         , SDL_WINDOW_SHOWN
         )))
         throw "could not create window";
+
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0x0, 0xff);
-    //SDL_RenderDrawPoint(renderer, 100, 100);
     SDL_RenderPresent(renderer);
 
     bool quit = false;

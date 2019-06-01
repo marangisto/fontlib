@@ -23,6 +23,8 @@ struct glyph_t
 struct font_t
 {
     uint8_t         height;
+    int8_t          min_y;
+    int8_t          max_y;
     char            first;
     char            last;
     const glyph_t   *glyphs;
