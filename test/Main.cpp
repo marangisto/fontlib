@@ -9,7 +9,8 @@ using namespace fontlib;
 
 static void draw_glyph(SDL_Renderer *renderer, font_t& font, char ch)
 {
-    int x0 = 50, y0 = 150;
+    int x0 = SCREEN_WIDTH / 2 - font.height / 4;
+    int y0 = SCREEN_HEIGHT / 2 + font.height / 2;
 
     SDL_SetRenderDrawColor(renderer, 0x0, 0x0, 0x0, 0xff);
     SDL_RenderClear(renderer);
@@ -28,6 +29,7 @@ static void draw_glyph(SDL_Renderer *renderer, font_t& font, char ch)
 
     if (g)
     {
+        printf("%d %d %d %d\n", g->width, g->height, g->offset_h, g->offset_v);
         SDL_SetRenderDrawColor(renderer, 0x80, 0x80, 0x80, 0xff);
         SDL_RenderDrawLine(renderer, x0, y0, SCREEN_WIDTH -1, y0);
         SDL_RenderDrawLine(renderer, x0, y0, x0, SCREEN_HEIGHT -1);
@@ -67,8 +69,8 @@ int main()
         ( "Hello World!"
         , SDL_WINDOWPOS_UNDEFINED
         , SDL_WINDOWPOS_UNDEFINED
-	    , SCREEN_WIDTH * 3
-        , SCREEN_HEIGHT * 3
+	    , SCREEN_WIDTH * 1
+        , SCREEN_HEIGHT * 1
         , SDL_WINDOW_SHOWN
         )))
         throw "could not create window";
@@ -79,7 +81,7 @@ int main()
     SDL_RenderPresent(renderer);
 
     bool quit = false;
-    font_t font = fontlib::font;
+    font_t font = fontlib::cmunrm_48;
 
     SDL_StartTextInput();
 

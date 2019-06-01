@@ -1,6 +1,8 @@
 CFLAGS = -O3 -fexceptions
 CPPFLAGS = -I../include
 LDFLAGS =
+FONTS = $(wildcard ../src/*.cpp)
+OBJECTS = $(FONTS:.cpp=.o)
 appname = test
 
 all: $(appname)
@@ -13,6 +15,7 @@ sdl_libs := $(shell pkg-config --libs sdl2)
 override CFLAGS += $(sdl_cflags)
 override LIBS += $(sdl_libs)
 
-$(appname): Main.o ../src/fontlib.o ../src/testfont.o
+$(appname): Main.o $(OBJECTS)
+	echo $(OBJECTS)
 	g++ $(LDFLAGS) -o $@ $^ $(LIBS)
 
