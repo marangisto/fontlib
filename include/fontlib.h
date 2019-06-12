@@ -22,6 +22,9 @@ struct glyph_t
 
 struct font_t
 {
+    uint16_t start_row() const { return -min_y; }
+    uint16_t line_spacing() const { return 1 + max_y - min_y; }
+
     uint8_t         height;
     int8_t          min_y;
     int8_t          max_y;
