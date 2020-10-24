@@ -34,7 +34,7 @@ do
             FONT=${BASE}
             ;;
     esac
-    for SIZE in 16 20 24 28 32 36 40 44 48
+    for SIZE in 14 15 16 18 20 24 28 32 36 40 44 48
     do
         NAME=${FONT}_${SIZE}
         TARGET=src/${NAME}.cpp
